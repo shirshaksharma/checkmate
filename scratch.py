@@ -44,20 +44,20 @@ while True:
             corner4 = (corners[48][0][0] + abs(corners[48][0][0] - corners[47][0][0]),
                        corners[48][0][1] + abs(corners[48][0][1] - corners[41][0][1]))
 
-    if retever and ret:
+    if retever:
         img2 = cv2.line(img2, corner1, corner2, (255, 0, 0), 5)
         img2 = cv2.line(img2, corner1, corner3, (255, 0, 0), 5)
         img2 = cv2.line(img2, corner4, corner2, (255, 0, 0), 5)
         img2 = cv2.line(img2, corner4, corner3, (255, 0, 0), 5)
 
-        img2 = cv2.line(img2, (corners[0][0][0], corners[0][0][1]),
-                        (corners[6][0][0], corners[6][0][1]), (0, 255, 0), 5)
-        img2 = cv2.line(img2, (corners[6][0][0], corners[6][0][1]),
-                        (corners[48][0][0], corners[48][0][1]), (0, 255, 0), 5)
-        img2 = cv2.line(img2, (corners[48][0][0], corners[48][0][1]),
-                        (corners[42][0][0], corners[42][0][1]), (0, 255, 0), 5)
-        img2 = cv2.line(img2, (corners[0][0][0], corners[0][0][1]),
-                        (corners[42][0][0], corners[42][0][1]), (0, 255, 0), 5)
+        img2 = cv2.line(img2, (corners2[0][0][0], corners2[0][0][1]),
+                        (corners2[6][0][0], corners2[6][0][1]), (0, 255, 0), 5)
+        img2 = cv2.line(img2, (corners2[6][0][0], corners2[6][0][1]),
+                        (corners2[48][0][0], corners2[48][0][1]), (0, 255, 0), 5)
+        img2 = cv2.line(img2, (corners2[48][0][0], corners2[48][0][1]),
+                        (corners2[42][0][0], corners2[42][0][1]), (0, 255, 0), 5)
+        img2 = cv2.line(img2, (corners2[0][0][0], corners2[0][0][1]),
+                        (corners2[42][0][0], corners2[42][0][1]), (0, 255, 0), 5)
 
     cv2.imshow('img', img2)
     if cv2.waitKey(1) & 0xFF == ord('q'):
