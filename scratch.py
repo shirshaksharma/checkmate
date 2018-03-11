@@ -58,7 +58,15 @@ while True:
             first_corner_b = get_points_around(corners, 1, 8)[1]
             first_corner = get_points_around(corners, 1, 8)[2]
 
-            print(first_corner_a, first_corner_b, corners[0][0])
+            ax = (corners[0][0][0] - (corners[1][0][0] - corners[0][0][0]))
+            ay = (corners[0][0][1] - (corners[1][0][1] - corners[0][0][1]))
+            bx = (corners[0][0][0] - (corners[7][0][0] - corners[0][0][0]))
+            by = (corners[0][0][1] - (corners[7][0][1] - corners[0][0][1]))
+
+            cx = corners[0][0][0] - \
+                (corners[0][0][0] - ax) - (corners[0][0][0] - bx)
+            cy = corners[0][0][1] - \
+                (corners[0][0][1] - ay) - (corners[0][0][1] - by)
 
             corner1 = (corners[0][0][0] - abs(corners[0][0][0] - corners[1][0][0]),
                        corners[0][0][1] - abs(corners[0][0][1] - corners[7][0][1]))
@@ -85,6 +93,10 @@ while True:
                         (corners2[42][0][0], corners2[42][0][1]), (0, 255, 0), 5)
         img2 = cv2.line(img2, (corners2[0][0][0], corners2[0][0][1]),
                         (corners2[42][0][0], corners2[42][0][1]), (0, 255, 0), 5)
+
+        img2 = cv2.circle(img2, (ax, ay), 10, (0, 0, 255))
+        img2 = cv2.circle(img2, (bx, by), 10, (0, 0, 255))
+        img2 = cv2.circle(img2, (cx, cy), 10, (0, 0, 255))
 
     cv2.imshow('img', img2)
     if cv2.waitKey(1) & 0xFF == ord('q'):
