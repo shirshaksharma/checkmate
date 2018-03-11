@@ -52,7 +52,7 @@ while True:
             lt = get_points_around(corners, 0, 1, 7)
             rt = get_points_around(corners, 6, 5, 13)
             lb = get_points_around(corners, 42, 43, 35)
-            rb = get_points_around(corners, 48, 47, 34)
+            rb = get_points_around(corners, 48, 47, 41)
 
     if retever:
 
@@ -65,10 +65,15 @@ while True:
         img2 = cv2.line(img2, (corners2[0][0][0], corners2[0][0][1]),
                         (corners2[42][0][0], corners2[42][0][1]), (0, 255, 0), 5)
 
-        img2 = cv2.circle(img2, lt, 10, (0, 0, 255))
-        img2 = cv2.circle(img2, rt, 10, (0, 0, 255))
-        img2 = cv2.circle(img2, lb, 10, (0, 0, 255))
-        img2 = cv2.circle(img2, rb, 10, (0, 0, 255))
+        # img2 = cv2.circle(img2, lt, 10, (0, 0, 255))
+        # img2 = cv2.circle(img2, rt, 10, (0, 0, 255))
+        # img2 = cv2.circle(img2, lb, 10, (0, 0, 255))
+        # img2 = cv2.circle(img2, rb, 10, (0, 0, 255))
+
+        img2 = cv2.line(img2, lt, rt, (0, 255, 0), 5)
+        img2 = cv2.line(img2, lt, lb, (0, 255, 0), 5)
+        img2 = cv2.line(img2, rb, rt, (0, 255, 0), 5)
+        img2 = cv2.line(img2, lb, rb, (0, 255, 0), 5)
 
     cv2.imshow('img', img2)
     if cv2.waitKey(1) & 0xFF == ord('q'):
