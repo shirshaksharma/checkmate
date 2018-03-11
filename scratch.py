@@ -34,7 +34,7 @@ retever = False
 while True:
     sta, img = images.read()
     img2 = img
-    if (ttime % 25 == 0):
+    if cv2.waitKey(1) & 0xFF == ord('s'):
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
         # Find the chess board corners
@@ -56,29 +56,28 @@ while True:
 
     if retever:
 
-        img2 = cv2.line(img2, (corners2[0][0][0], corners2[0][0][1]),
-                        (corners2[6][0][0], corners2[6][0][1]), (0, 255, 0), 5)
-        img2 = cv2.line(img2, (corners2[6][0][0], corners2[6][0][1]),
-                        (corners2[48][0][0], corners2[48][0][1]), (0, 255, 0), 5)
-        img2 = cv2.line(img2, (corners2[48][0][0], corners2[48][0][1]),
-                        (corners2[42][0][0], corners2[42][0][1]), (0, 255, 0), 5)
-        img2 = cv2.line(img2, (corners2[0][0][0], corners2[0][0][1]),
-                        (corners2[42][0][0], corners2[42][0][1]), (0, 255, 0), 5)
+        # img2 = cv2.line(img2, (corners2[0][0][0], corners2[0][0][1]),
+        #                 (corners2[6][0][0], corners2[6][0][1]), (0, 255, 0), 5)
+        # img2 = cv2.line(img2, (corners2[6][0][0], corners2[6][0][1]),
+        #                 (corners2[48][0][0], corners2[48][0][1]), (0, 255, 0), 5)
+        # img2 = cv2.line(img2, (corners2[48][0][0], corners2[48][0][1]),
+        #                 (corners2[42][0][0], corners2[42][0][1]), (0, 255, 0), 5)
+        # img2 = cv2.line(img2, (corners2[0][0][0], corners2[0][0][1]),
+        #                 (corners2[42][0][0], corners2[42][0][1]), (0, 255, 0), 5)
 
         # img2 = cv2.circle(img2, lt, 10, (0, 0, 255))
         # img2 = cv2.circle(img2, rt, 10, (0, 0, 255))
         # img2 = cv2.circle(img2, lb, 10, (0, 0, 255))
         # img2 = cv2.circle(img2, rb, 10, (0, 0, 255))
 
-        img2 = cv2.line(img2, lt, rt, (0, 255, 0), 5)
-        img2 = cv2.line(img2, lt, lb, (0, 255, 0), 5)
+        img2 = cv2.line(img2, lt, rt, (255, 0, 0), 5)
+        img2 = cv2.line(img2, lt, lb, (0, 255, 255), 5)
         img2 = cv2.line(img2, rb, rt, (0, 255, 0), 5)
-        img2 = cv2.line(img2, lb, rb, (0, 255, 0), 5)
+        img2 = cv2.line(img2, lb, rb, (255, 255, 0), 5)
 
     cv2.imshow('img', img2)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
-    ttime += 1
 
 cv2.destroyAllWindows()
 images.release()
