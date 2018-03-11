@@ -3,6 +3,23 @@ import cv2
 import glob
 import time
 
+
+def get_points_around(arrayofpoints, point, gridlength):
+    a = (
+        arrayofpoints[point][0][0] - arrayofpoints[point + 1][0][0],
+        arrayofpoints[point][0][1] - arrayofpoints[point + 1][0][1]
+    )
+    b = (
+        arrayofpoints[point][0][0] - arrayofpoints[point + gridlength - 1][0][0],
+        arrayofpoints[point][0][1] - arrayofpoints[point + gridlength - 1][0][1]
+    )
+    c = (
+        abs(arrayofpoints[point][0][0] - a[0]),
+        abs(arrayofpoints[point][0][1] - b[0])
+    )
+    return [a, b, c]
+
+
 # termination criteria
 criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 
@@ -35,6 +52,12 @@ while True:
                 gray, corners, (11, 11), (-1, -1), criteria)
             imgpoints.append(corners2)
 
+            first_corner_a = get_points_around(corners, 1, 8)[0]
+            first_corner_b = get_points_around(corners, 1, 8)[1]
+            first_corner = get_points_around(corners, 1, 8)[2]
+
+            print(first_corner_a, first_corner_b, corners[0][0])
+
             corner1 = (corners[0][0][0] - abs(corners[0][0][0] - corners[1][0][0]),
                        corners[0][0][1] - abs(corners[0][0][1] - corners[7][0][1]))
             corner2 = (corners[6][0][0] + abs(corners[6][0][0] - corners[5][0][0]),
@@ -43,6 +66,8 @@ while True:
                        corners[42][0][1] + abs(corners[42][0][1] - corners[35][0][1]))
             corner4 = (corners[48][0][0] + abs(corners[48][0][0] - corners[47][0][0]),
                        corners[48][0][1] + abs(corners[48][0][1] - corners[41][0][1]))
+
+            img2 = cv2.circle(img2, first_corner, 10, (0, 0, 255))
 
     if retever:
         img2 = cv2.line(img2, corner1, corner2, (255, 0, 0), 5)
