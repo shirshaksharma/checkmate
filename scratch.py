@@ -10,8 +10,10 @@ def get_points_around(arrayofpoints, point, gridlength):
         arrayofpoints[point][0][1] - arrayofpoints[point + 1][0][1]
     )
     b = (
-        arrayofpoints[point][0][0] - arrayofpoints[point + gridlength - 1][0][0],
-        arrayofpoints[point][0][1] - arrayofpoints[point + gridlength - 1][0][1]
+        arrayofpoints[point][0][0] -
+        arrayofpoints[point + gridlength - 1][0][0],
+        arrayofpoints[point][0][1] -
+        arrayofpoints[point + gridlength - 1][0][1]
     )
     c = (
         abs(arrayofpoints[point][0][0] - a[0]),
@@ -37,7 +39,7 @@ retever = False
 while True:
     sta, img = images.read()
     img2 = img
-    if (ttime % 5 == 0):
+    if (ttime % 25 == 0):
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
         # Find the chess board corners
@@ -87,6 +89,7 @@ while True:
     cv2.imshow('img', img2)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
+    ttime += 1
 
 cv2.destroyAllWindows()
 images.release()
