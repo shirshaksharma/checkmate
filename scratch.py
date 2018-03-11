@@ -4,22 +4,17 @@ import glob
 import time
 
 
-def get_points_around(arrayofpoints, point, gridlength):
-    a = (
-        arrayofpoints[point][0][0] - arrayofpoints[point + 1][0][0],
-        arrayofpoints[point][0][1] - arrayofpoints[point + 1][0][1]
-    )
-    b = (
-        arrayofpoints[point][0][0] -
-        arrayofpoints[point + gridlength - 1][0][0],
-        arrayofpoints[point][0][1] -
-        arrayofpoints[point + gridlength - 1][0][1]
-    )
-    c = (
-        abs(arrayofpoints[point][0][0] - a[0]),
-        abs(arrayofpoints[point][0][1] - b[0])
-    )
-    return [a, b, c]
+def get_points_around(corners, a, b, c):
+    ax = (corners[a][0][0] - (corners[b][0][0] - corners[a][0][0]))
+    ay = (corners[a][0][1] - (corners[b][0][1] - corners[a][0][1]))
+    bx = (corners[a][0][0] - (corners[c][0][0] - corners[a][0][0]))
+    by = (corners[a][0][1] - (corners[c][0][1] - corners[a][0][1]))
+
+    cx = corners[a][0][0] - \
+        (corners[a][0][0] - ax) - (corners[a][0][0] - bx)
+    cy = corners[a][0][1] - \
+        (corners[a][0][1] - ay) - (corners[a][0][1] - by)
+    return (cx, cy)
 
 
 # termination criteria
@@ -54,36 +49,12 @@ while True:
                 gray, corners, (11, 11), (-1, -1), criteria)
             imgpoints.append(corners2)
 
-            first_corner_a = get_points_around(corners, 1, 8)[0]
-            first_corner_b = get_points_around(corners, 1, 8)[1]
-            first_corner = get_points_around(corners, 1, 8)[2]
-
-            ax = (corners[0][0][0] - (corners[1][0][0] - corners[0][0][0]))
-            ay = (corners[0][0][1] - (corners[1][0][1] - corners[0][0][1]))
-            bx = (corners[0][0][0] - (corners[7][0][0] - corners[0][0][0]))
-            by = (corners[0][0][1] - (corners[7][0][1] - corners[0][0][1]))
-
-            cx = corners[0][0][0] - \
-                (corners[0][0][0] - ax) - (corners[0][0][0] - bx)
-            cy = corners[0][0][1] - \
-                (corners[0][0][1] - ay) - (corners[0][0][1] - by)
-
-            corner1 = (corners[0][0][0] - abs(corners[0][0][0] - corners[1][0][0]),
-                       corners[0][0][1] - abs(corners[0][0][1] - corners[7][0][1]))
-            corner2 = (corners[6][0][0] + abs(corners[6][0][0] - corners[5][0][0]),
-                       corners[6][0][1] - abs(corners[6][0][1] - corners[13][0][1]))
-            corner3 = (corners[42][0][0] - abs(corners[42][0][0] - corners[43][0][0]),
-                       corners[42][0][1] + abs(corners[42][0][1] - corners[35][0][1]))
-            corner4 = (corners[48][0][0] + abs(corners[48][0][0] - corners[47][0][0]),
-                       corners[48][0][1] + abs(corners[48][0][1] - corners[41][0][1]))
-
-            img2 = cv2.circle(img2, first_corner, 10, (0, 0, 255))
+            lt = get_points_around(corners, 0, 1, 7)
+            rt = get_points_around(corners, 6, 5, 13)
+            lb = get_points_around(corners, 42, 43, 35)
+            rb = get_points_around(corners, 48, 47, 34)
 
     if retever:
-        img2 = cv2.line(img2, corner1, corner2, (255, 0, 0), 5)
-        img2 = cv2.line(img2, corner1, corner3, (255, 0, 0), 5)
-        img2 = cv2.line(img2, corner4, corner2, (255, 0, 0), 5)
-        img2 = cv2.line(img2, corner4, corner3, (255, 0, 0), 5)
 
         img2 = cv2.line(img2, (corners2[0][0][0], corners2[0][0][1]),
                         (corners2[6][0][0], corners2[6][0][1]), (0, 255, 0), 5)
@@ -94,9 +65,10 @@ while True:
         img2 = cv2.line(img2, (corners2[0][0][0], corners2[0][0][1]),
                         (corners2[42][0][0], corners2[42][0][1]), (0, 255, 0), 5)
 
-        img2 = cv2.circle(img2, (ax, ay), 10, (0, 0, 255))
-        img2 = cv2.circle(img2, (bx, by), 10, (0, 0, 255))
-        img2 = cv2.circle(img2, (cx, cy), 10, (0, 0, 255))
+        img2 = cv2.circle(img2, lt, 10, (0, 0, 255))
+        img2 = cv2.circle(img2, rt, 10, (0, 0, 255))
+        img2 = cv2.circle(img2, lb, 10, (0, 0, 255))
+        img2 = cv2.circle(img2, rb, 10, (0, 0, 255))
 
     cv2.imshow('img', img2)
     if cv2.waitKey(1) & 0xFF == ord('q'):
