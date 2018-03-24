@@ -17,6 +17,74 @@ def get_points_around(corners, a, b, c):
     return (cx, cy)
 
 
+def construct_board(toprow, leftcol, rightcol, botrow, corners):
+    board = {}
+    leters = ['B', 'C', 'D', 'E', 'F', 'G']
+    # First Row
+    board['A1'] = {
+        'TL': toprow[0],
+        'TR': toprow[1],
+        'BL': leftcol[0],
+        'BR': (corners[0][0][0], corners[0][0][1])
+    }
+    for i in range(1, 7):
+        board['A'+str(i+1)] = {
+            'TL': toprow[i],
+            'TR': toprow[i+1],
+            'BL': (corners[i-1][0][0], corners[i-1][0][1]),
+            'BR': (corners[i][0][0], corners[i][0][1])
+        }
+    board['A8'] = {
+        'TL': toprow[7],
+        'TR': toprow[8],
+        'BL': (corners[6][0][0], corners[6][0][1]),
+        'BR': rightcol[0]
+    }
+    # Middle Rows
+    for i in range(0, 6):
+        leter = leters[i]
+        board[(leter + '1')] = {
+            'TL': leftcol[i],
+            'TR': (corners[i*7][0][0], corners[(i*7)][0][1]),
+            'BL': leftcol[i+1],
+            'BR': (corners[(i+1)*7][0][0], corners[(i+1)*7][0][1])
+        }
+        for j in range(2, 8):
+            board[(leter + str(j))] = {
+                'TL': (corners[(i*7) + (j-2)][0][0], corners[(i*7) + (j-2)][0][1]),
+                'BL': (corners[((i+1)*7) + (j-2)][0][0], corners[((i+1)*7) + (j-2)][0][1]),
+                'TR': (corners[(i*7) + (j-1)][0][0], corners[(i*7) + (j-1)][0][1]),
+                'BR': (corners[((i+1)*7) + (j-1)][0][0], corners[((i+1)*7) + (j-1)][0][1])
+            }
+        board[(leter + '8')] = {
+            'TL': (corners[i*7 + 6][0][0], corners[i*7 + 6][0][1]),
+            'TR': rightcol[i],
+            'BL': (corners[(i + 1)*7 + 6][0][0], corners[(i + 1)*7 + 6][0][1]),
+            'BR': rightcol[i+1]
+        }
+    # Bottom Row
+    board['H1'] = {
+        'TL': leftcol[6],
+        'TR': (corners[42][0][0], corners[42][0][1]),
+        'BL': leftcol[7],
+        'BR': botrow[0]
+    }
+    for i in range(0, 6):
+        board['H'+str(i+2)] = {
+            'TL': (corners[42 + i][0][0], corners[42 + i][0][1]),
+            'TR': (corners[42 + i + 1][0][0], corners[42 + i + 1][0][1]),
+            'BL': botrow[i],
+            'BR': botrow[i+1]
+        }
+    board['H8'] = {
+        'TL': (corners[48][0][0], corners[48][0][1]),
+        'TR': rightcol[6],
+        'BL': botrow[6],
+        'BR': rightcol[7]
+    }
+    return board
+
+
 # termination criteria
 criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 
@@ -35,6 +103,7 @@ toprow = []
 leftcol = []
 rightcol = []
 botrow = []
+board = {}
 while True:
     sta, img = images.read()
     img2 = img
@@ -80,10 +149,8 @@ while True:
                 botrow.append(get_points_around(corners, i, i+1, i-7))
             for i in range(45, 48):
                 botrow.append(get_points_around(corners, i, i-1, i-7))
-            lt = get_points_around(corners, 0, 1, 7)
-            rt = get_points_around(corners, 6, 5, 13)
-            lb = get_points_around(corners, 42, 43, 35)
-            rb = get_points_around(corners, 48, 47, 41)
+
+            board = construct_board(toprow, leftcol, rightcol, botrow, corners)
 
     if retever:
 
@@ -100,21 +167,27 @@ while True:
         # img2 = cv2.circle(img2, rt, 10, (0, 0, 255))
         # img2 = cv2.circle(img2, lb, 10, (0, 0, 255))
         # img2 = cv2.circle(img2, rb, 10, (0, 0, 255))
-        for point in toprow:
-            img2 = cv2.circle(img2, point, 10, (0, 0, 255))
-        for point in leftcol:
-            img2 = cv2.circle(img2, point, 10, (0, 255, 0))
-        for point in rightcol:
-            img2 = cv2.circle(img2, point, 10, (255, 255, 0))
-        for point in botrow:
-            img2 = cv2.circle(img2, point, 10, (255, 0, 0))
-        for point in corners:
-            img2 = cv2.circle(
-                img2, (point[0][0], point[0][1]), 10, (255, 255, 255))
+        # for point in toprow:
+        #     img2 = cv2.circle(img2, point, 10, (0, 0, 255))
+        # for point in leftcol:
+        #     img2 = cv2.circle(img2, point, 10, (0, 255, 0))
+        # for point in rightcol:
+        #     img2 = cv2.circle(img2, point, 10, (255, 255, 0))
+        # for point in botrow:
+        #     img2 = cv2.circle(img2, point, 10, (255, 0, 0))
+        # for point in corners:
+        #     img2 = cv2.circle(
+        #         img2, (point[0][0], point[0][1]), 10, (255, 255, 255))
         # img2 = cv2.line(img2, lt, rt, (255, 0, 0), 5)
         # img2 = cv2.line(img2, lt, lb, (0, 255, 255), 5)
         # img2 = cv2.line(img2, rb, rt, (0, 255, 0), 5)
         # img2 = cv2.line(img2, lb, rb, (255, 255, 0), 5)
+
+        for key, square in board.items():
+            img2 = cv2.line(img2, square['TL'], square['TR'], (255, 0, 0), 5)
+            img2 = cv2.line(img2, square['TL'], square['BL'], (255, 0, 0), 5)
+            img2 = cv2.line(img2, square['TR'], square['BR'], (255, 0, 0), 5)
+            img2 = cv2.line(img2, square['BL'], square['BR'], (255, 0, 0), 5)
 
     cv2.imshow('img', img2)
     if cv2.waitKey(1) & 0xFF == ord('q'):
