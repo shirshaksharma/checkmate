@@ -31,6 +31,10 @@ imgpoints = []  # 2d points in image plane.
 images = cv2.VideoCapture(0)
 ttime = 0
 retever = False
+toprow = []
+leftcol = []
+rightcol = []
+botrow = []
 while True:
     sta, img = images.read()
     img2 = img
@@ -48,7 +52,34 @@ while True:
             corners2 = cv2.cornerSubPix(
                 gray, corners, (11, 11), (-1, -1), criteria)
             imgpoints.append(corners2)
-
+            toprow = []
+            leftcol = []
+            rightcol = []
+            botrow = []
+            # top row
+            for i in range(0, 6):
+                toprow.append(get_points_around(corners, i, i+1, i+7))
+            for i in range(4, 7):
+                toprow.append(get_points_around(corners, i, i-1, i+7))
+            # left col
+            for i in range(1, 6):
+                leftcol.append(get_points_around(
+                    corners, 0 + i*7, 1 + i*7, 7 + i*7))
+            for i in range(4, 7):
+                leftcol.append(get_points_around(
+                    corners, 0 + i*7, 1 + i*7, i*7 - 7))
+            # right col
+            for i in range(1, 6):
+                rightcol.append(get_points_around(
+                    corners, 6 + i*7, 5 + i*7, 13 + i*7))
+            for i in range(5, 8):
+                rightcol.append(get_points_around(
+                    corners, i*7 - 1, i*7 - 2, i*7 - 8))
+            # bot row
+            for i in range(43, 47):
+                botrow.append(get_points_around(corners, i, i+1, i-7))
+            for i in range(45, 48):
+                botrow.append(get_points_around(corners, i, i-1, i-7))
             lt = get_points_around(corners, 0, 1, 7)
             rt = get_points_around(corners, 6, 5, 13)
             lb = get_points_around(corners, 42, 43, 35)
@@ -69,11 +100,21 @@ while True:
         # img2 = cv2.circle(img2, rt, 10, (0, 0, 255))
         # img2 = cv2.circle(img2, lb, 10, (0, 0, 255))
         # img2 = cv2.circle(img2, rb, 10, (0, 0, 255))
-
-        img2 = cv2.line(img2, lt, rt, (255, 0, 0), 5)
-        img2 = cv2.line(img2, lt, lb, (0, 255, 255), 5)
-        img2 = cv2.line(img2, rb, rt, (0, 255, 0), 5)
-        img2 = cv2.line(img2, lb, rb, (255, 255, 0), 5)
+        for point in toprow:
+            img2 = cv2.circle(img2, point, 10, (0, 0, 255))
+        for point in leftcol:
+            img2 = cv2.circle(img2, point, 10, (0, 255, 0))
+        for point in rightcol:
+            img2 = cv2.circle(img2, point, 10, (255, 255, 0))
+        for point in botrow:
+            img2 = cv2.circle(img2, point, 10, (255, 0, 0))
+        for point in corners:
+            img2 = cv2.circle(
+                img2, (point[0][0], point[0][1]), 10, (255, 255, 255))
+        # img2 = cv2.line(img2, lt, rt, (255, 0, 0), 5)
+        # img2 = cv2.line(img2, lt, lb, (0, 255, 255), 5)
+        # img2 = cv2.line(img2, rb, rt, (0, 255, 0), 5)
+        # img2 = cv2.line(img2, lb, rb, (255, 255, 0), 5)
 
     cv2.imshow('img', img2)
     if cv2.waitKey(1) & 0xFF == ord('q'):
