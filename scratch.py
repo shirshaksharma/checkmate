@@ -45,7 +45,8 @@ def rotate_board(board):
             'TR': square['TR'],
             'BL': square['BL'],
             'BR': square['BR'],
-            'color': color
+            'color': color,
+            'filled': False
         }
     return newboard
 
@@ -69,7 +70,8 @@ def construct_board(toprow, leftcol, rightcol, botrow, corners):
         'TR': toprow[1],
         'BL': leftcol[0],
         'BR': (corners[0][0][0], corners[0][0][1]),
-        'color': (0, 0, 255)
+        'color': (0, 0, 255),
+        'filled': False
     }
     for i in range(1, 7):
         board['A'+str(i+1)] = {
@@ -77,14 +79,16 @@ def construct_board(toprow, leftcol, rightcol, botrow, corners):
             'TR': toprow[i+1],
             'BL': (corners[i-1][0][0], corners[i-1][0][1]),
             'BR': (corners[i][0][0], corners[i][0][1]),
-            'color': (0, 0, 255)
+            'color': (0, 0, 255),
+            'filled': False
         }
     board['A8'] = {
         'TL': toprow[7],
         'TR': toprow[8],
         'BL': (corners[6][0][0], corners[6][0][1]),
         'BR': rightcol[0],
-        'color': (0, 0, 255)
+        'color': (0, 0, 255),
+        'filled': False
     }
     # Middle Rows
     for i in range(0, 6):
@@ -94,7 +98,8 @@ def construct_board(toprow, leftcol, rightcol, botrow, corners):
             'TR': (corners[i*7][0][0], corners[(i*7)][0][1]),
             'BL': leftcol[i+1],
             'BR': (corners[(i+1)*7][0][0], corners[(i+1)*7][0][1]),
-            'color': (0, 255, 0)
+            'color': (0, 255, 0),
+            'filled': False
         }
         for j in range(2, 8):
             board[(leter + str(j))] = {
@@ -102,14 +107,16 @@ def construct_board(toprow, leftcol, rightcol, botrow, corners):
                 'BL': (corners[((i+1)*7) + (j-2)][0][0], corners[((i+1)*7) + (j-2)][0][1]),
                 'TR': (corners[(i*7) + (j-1)][0][0], corners[(i*7) + (j-1)][0][1]),
                 'BR': (corners[((i+1)*7) + (j-1)][0][0], corners[((i+1)*7) + (j-1)][0][1]),
-                'color': (0, 255, 0)
+                'color': (0, 255, 0),
+                'filled': False
             }
         board[(leter + '8')] = {
             'TL': (corners[i*7 + 6][0][0], corners[i*7 + 6][0][1]),
             'TR': rightcol[i],
             'BL': (corners[(i + 1)*7 + 6][0][0], corners[(i + 1)*7 + 6][0][1]),
             'BR': rightcol[i+1],
-            'color': (0, 255, 0)
+            'color': (0, 255, 0),
+            'filled': False
         }
     # Bottom Row
     board['H1'] = {
@@ -117,7 +124,8 @@ def construct_board(toprow, leftcol, rightcol, botrow, corners):
         'TR': (corners[42][0][0], corners[42][0][1]),
         'BL': leftcol[7],
         'BR': botrow[0],
-        'color': (255, 0, 0)
+        'color': (255, 0, 0),
+        'filled': False
     }
     for i in range(0, 6):
         board['H'+str(i+2)] = {
@@ -125,7 +133,8 @@ def construct_board(toprow, leftcol, rightcol, botrow, corners):
             'TR': (corners[42 + i + 1][0][0], corners[42 + i + 1][0][1]),
             'BL': botrow[i],
             'BR': botrow[i+1],
-            'color': (255, 0, 0)
+            'color': (255, 0, 0),
+            'filled': False
 
         }
     board['H8'] = {
@@ -133,7 +142,8 @@ def construct_board(toprow, leftcol, rightcol, botrow, corners):
         'TR': rightcol[6],
         'BL': botrow[6],
         'BR': rightcol[7],
-        'color': (255, 0, 0)
+        'color': (255, 0, 0),
+        'filled': False
 
     }
     print(which_square(board, (600, 350)))
@@ -147,7 +157,9 @@ board = {}
 def click(event, x, y, flags, param):
     if board != {}:
         if event == cv2.EVENT_LBUTTONDOWN:
-            print(which_square(board, (x, y)))
+            for key, square in board.items():
+                square['filled'] = False
+            board[which_square(board, (x, y))]['filled'] = True
 
 
 # termination criteria
@@ -253,14 +265,21 @@ while True:
         # img2 = cv2.line(img2, lb, rb, (255, 255, 0), 5)
 
         for key, square in board.items():
-            img2 = cv2.line(img2, square['TL'],
-                            square['TR'], square['color'], 5)
-            img2 = cv2.line(img2, square['TL'],
-                            square['BL'], square['color'], 5)
-            img2 = cv2.line(img2, square['TR'],
-                            square['BR'], square['color'], 5)
-            img2 = cv2.line(img2, square['BL'],
-                            square['BR'], square['color'], 5)
+            # img2 = cv2.line(img2, square['TL'],
+            #                 square['TR'], square['color'], 5)
+            # img2 = cv2.line(img2, square['TL'],
+            #                 square['BL'], square['color'], 5)
+            # img2 = cv2.line(img2, square['TR'],
+            #                 square['BR'], square['color'], 5)
+            # img2 = cv2.line(img2, square['BL'],
+            #                 square['BR'], square['color'], 5)
+            pts = np.array([square['TL'], square['TR'],
+                            square['BR'], square['BL']], np.int)
+            pts = pts.reshape(-1, 1, 2)
+            if(square['filled'] == True):
+                img2 = cv2.fillPoly(img2, [pts], square['color'])
+            else:
+                img2 = cv2.polylines(img2, [pts], 1, square['color'], 4)
         img2 = cv2.circle(img2, (600, 350), 10, (255, 255, 0))
 
     cv2.imshow('img', img2)
