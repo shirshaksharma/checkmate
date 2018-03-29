@@ -98,9 +98,17 @@ while True:
 
         # Drawing the contours
         cv2.drawContours(img, largestContourIndex, -1, (0, 255, 0), 3)
-        #
-        # hull = cv2.convexHull(largestContourIndex)
-        # cv2.drawContours(img, hull, 0, (255, 0, 0), 3)
+
+        hull = cv2.convexHull(largestContourIndex, returnPoints=False)
+        defects = cv2.convexityDefects(largestContourIndex, hull)
+
+        for i in range(defects.shape[0]):
+            s, e, f, d = defects[i, 0]
+            start = tuple(largestContourIndex[s][0])
+            end = tuple(largestContourIndex[e][0])
+            far = tuple(largestContourIndex[f][0])
+            cv2.line(img, start, end, [0, 255, 0], 4)
+            cv2.circle(img, far, 5, [0, 0, 255], -1)
 
         cv2.imshow('img', img)
         cv2.imshow('Blur + Dilation', imgDilation)
