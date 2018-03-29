@@ -71,7 +71,6 @@ while True:
         imgDisplayCircle = displayPoints(img)[0]
         cv2.imshow('img with circle', imgDisplayCircle)
         hsv_hand = cv2.cvtColor(displayPoints(img)[1], cv2.COLOR_BGR2HSV)
-        print("HSV Hand", hsv_hand)
 
     # Display the window
     else:
@@ -81,11 +80,27 @@ while True:
 
         imgMedianBlur = cv2.medianBlur(imgHSVInRange, 5)
         kernel = np.ones([5, 5], np.uint8)
-        imgDilation = cv2.dilate(imgMedianBlur, kernel, iterations=1)
+        imgDilation = cv2.dilate(imgMedianBlur, kernel, 1)
 
         # Detecting contours
         ret, thresh = cv2.threshold(imgDilation, 127, 255, 0)
-        im2, contours, hierarchy = cv2.findContours(imgDilation, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        im2, contours, hierarchy = cv2.findContours(imgDilation, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+        # Picking the largest contour
+        largestContourIndex = 0
+        largestContourArea = 0
+
+        for cnt in contours:
+            area = cv2.contourArea(cnt)
+            if area > largestContourArea:
+                largestContourArea = area
+                largestContourIndex = cnt
+
+        # Drawing the contours
+        cv2.drawContours(img, largestContourIndex, -1, (0, 255, 0), 3)
+        #
+        # hull = cv2.convexHull(largestContourIndex)
+        # cv2.drawContours(img, hull, 0, (255, 0, 0), 3)
 
         cv2.imshow('img', img)
         cv2.imshow('Blur + Dilation', imgDilation)
