@@ -201,10 +201,18 @@ def get_board(gray):
     return board, True
 
 
-def get_corners(board):
+def get_corners(board, img):
     corner_a1 = board['A1']['BL']
     corner_a8 = board['A8']['TL']
     corner_h1 = board['H1']['BR']
     corner_h8 = board['H8']['TR']
 
-    return corner_a1, corner_a8, corner_h1, corner_h8
+    print("roi range", int(corner_h8[1]), int(corner_a1[1]))
+    print("roi range", int(corner_h8[0]), int(corner_a1[0]))
+
+    board_roi = img[
+        int(corner_h8[1]):int(corner_a1[1]),
+        int(corner_a1[0]):int(corner_h8[0]),
+    ]
+
+    return board_roi, corner_a1, corner_a8, corner_h1, corner_h8

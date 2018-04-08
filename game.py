@@ -38,6 +38,11 @@ while True:
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         board, retever = get_board(gray)
 
+        # Get the board ROI
+        if board:
+            corners_board = get_corners(board, img2)
+            board_roi = corners_board[0]
+
     # Exits the game
     if key == ord('q'):
         break
@@ -55,11 +60,6 @@ while True:
                 img2 = cv2.polylines(img2, [pts], 1, square['color'], 4)
         img2 = cv2.circle(img2, (600, 350), 10, (255, 255, 0))
 
-    if board:
-        # Gets corners
-        corners_board = get_corners(board)
-        board_roi = img2[int(corners_board[0][0]):int(corners_board[0][1]), int(corners_board[3][0]):int(corners_board[3][1])]
-    print("board_roi", board_roi)
     cv2.imshow("board roi", board_roi)
     cv2.imshow('img', img2)
 
