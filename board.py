@@ -199,3 +199,12 @@ def get_board(gray):
     else:
         return {}, False
     return board, True
+
+
+def get_corners(board):
+    corner_a1 = board['A1']['BL']
+    corner_a8 = board['A8']['TL']
+    corner_h1 = board['H1']['BR']
+    corner_h8 = board['H8']['TR']
+
+    return corner_a1, corner_a8, corner_h1, corner_h8
