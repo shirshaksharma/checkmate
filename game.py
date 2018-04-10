@@ -9,7 +9,9 @@ from handdetect import find_largest_contour, find_convex_hull, HSV_MAX, HSV_MIN
 board = {}
 filled = ["", 0]
 farthest_point = (0, 0)
+allFarPoints = []
 filledArray = []
+
 siq = ""
 
 chess = chessGame()
@@ -96,6 +98,8 @@ while True:
 
     if convex_hall is not 0:
         farthest_point = convex_hall[2]
+        allFarPoints = convex_hall[3]
+        print("all far points", allFarPoints)
 
     cv2.imshow("blur dilation", blur_dilation)
 

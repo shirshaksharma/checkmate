@@ -75,6 +75,7 @@ def find_convex_hull(img, largest_contour):
     hull = cv2.convexHull(largest_contour, returnPoints=False)
     defects = cv2.convexityDefects(largest_contour, hull)
 
+    all_detected_points = []
     start = 0
     end = 0
     far = 0
@@ -84,6 +85,7 @@ def find_convex_hull(img, largest_contour):
             start = tuple(largest_contour[s][0])
             end = tuple(largest_contour[e][0])
             far = tuple(largest_contour[f][0])
+            all_detected_points.append(far)
             cv2.line(img, start, end, [0, 255, 0], 4)
             cv2.circle(img, far, 5, [0, 0, 255], -1)
 
@@ -91,7 +93,7 @@ def find_convex_hull(img, largest_contour):
         print("Shape not found")
         return 0
 
-    return [start, end, far]
+    return [start, end, far, all_detected_points]
 
 
 def nothing(x):
