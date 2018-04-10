@@ -44,9 +44,9 @@ def rotate_board(board):
         numberi = numbers.index(key[1])
         # letters[7-numberi]+numbers[letteri]
         newstring = letters[7-numberi]+numbers[letteri]
-        if newstring[0] == 'A':
+        if newstring[1] == '1':
             color = (0, 0, 255)
-        elif newstring[0] == 'H':
+        elif newstring[1] == '8':
             color = (255, 0, 0)
         else:
             color = (0, 255, 0)
@@ -79,7 +79,7 @@ def construct_board(toprow, leftcol, rightcol, botrow, corners):
             'TR': toprow[i+1],
             'BL': (corners[i-1][0][0], corners[i-1][0][1]),
             'BR': (corners[i][0][0], corners[i][0][1]),
-            'color': (0, 0, 255),
+            'color': (0, 255, 0),
             'filled': False
         }
     board['A8'] = {
@@ -87,7 +87,7 @@ def construct_board(toprow, leftcol, rightcol, botrow, corners):
         'TR': toprow[8],
         'BL': (corners[6][0][0], corners[6][0][1]),
         'BR': rightcol[0],
-        'color': (0, 0, 255),
+        'color': (255, 0, 0),
         'filled': False
     }
     # Middle Rows
@@ -98,7 +98,7 @@ def construct_board(toprow, leftcol, rightcol, botrow, corners):
             'TR': (corners[i*7][0][0], corners[(i*7)][0][1]),
             'BL': leftcol[i+1],
             'BR': (corners[(i+1)*7][0][0], corners[(i+1)*7][0][1]),
-            'color': (0, 255, 0),
+            'color': (0, 0, 255),
             'filled': False
         }
         for j in range(2, 8):
@@ -115,7 +115,7 @@ def construct_board(toprow, leftcol, rightcol, botrow, corners):
             'TR': rightcol[i],
             'BL': (corners[(i + 1)*7 + 6][0][0], corners[(i + 1)*7 + 6][0][1]),
             'BR': rightcol[i+1],
-            'color': (0, 255, 0),
+            'color': (255, 0, 0),
             'filled': False
         }
     # Bottom Row
@@ -124,7 +124,7 @@ def construct_board(toprow, leftcol, rightcol, botrow, corners):
         'TR': (corners[42][0][0], corners[42][0][1]),
         'BL': leftcol[7],
         'BR': botrow[0],
-        'color': (255, 0, 0),
+        'color': (0, 0, 255),
         'filled': False
     }
     for i in range(0, 6):
@@ -133,7 +133,7 @@ def construct_board(toprow, leftcol, rightcol, botrow, corners):
             'TR': (corners[42 + i + 1][0][0], corners[42 + i + 1][0][1]),
             'BL': botrow[i],
             'BR': botrow[i+1],
-            'color': (255, 0, 0),
+            'color': (0, 255, 0),
             'filled': False
 
         }
