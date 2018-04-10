@@ -199,3 +199,80 @@ def get_board(gray):
     else:
         return {}, False
     return board, True
+
+
+def get_corners(board, img):
+
+    corner_a1 = board['A1']['BL']
+    corner_a8 = board['A8']['TL']
+    corner_h1 = board['H1']['BR']
+    corner_h8 = board['H8']['TR']
+
+    corners = [
+        corner_a1,
+        corner_h8,
+        corner_h1,
+        corner_a8
+    ]
+
+    x_min = corner_a8
+    x_max = corner_h8
+    y_min = corner_a1
+    y_max = corner_h1
+
+    for i in range(len(corners)):
+        if corners[i][0] <= x_min[0]:
+            x_min = corners[i]
+        if corners[i][0] > x_max[0]:
+            x_max = corners[i]
+        if corners[i][1] <= y_min[1]:
+            y_min = corners[i]
+        if corners[i][1] > y_max[1]:
+            y_max = corners[i]
+
+    height = abs(y_max[1] - y_min[1])
+    width = abs(x_max[0] - x_min[0])
+
+    roi_y_min = y_min[1]
+    roi_y_max = y_min[1] + height
+
+    roi_x_min = x_min[0]
+    roi_x_max = x_min[0] + width
+
+    # Making it a wider area
+    differential = height / 8
+
+    if roi_y_min - differential < 0:
+        roi_y_min = 0
+    else:
+        roi_y_min = roi_y_min - differential
+
+    roi_y_max = roi_y_max + differential
+
+    if roi_x_min - differential < 0:
+        roi_x_min = 0
+    else:
+        roi_x_min = roi_x_min - differential
+
+    roi_x_max = roi_x_max + differential
+
+    board_roi = img[
+        int(roi_y_min):int(roi_y_max),
+        int(roi_x_min):int(roi_x_max)
+    ]
+
+    # height = abs(corner_h8[1] - corner_a1[1])
+    # width = abs(corner_h1[0] - corner_a8[0])
+    #
+    # start_point = corner_a8[0], corner_h8[1]
+    # end_point = corner_h1[0], corner_a1[1]
+    #
+    # print("height range", corner_a8, corner_a1, height)
+    # print("width range", corner_h1, corner_a8, width)
+
+    # board_roi = img[
+    #     int(corner_h8[1]):int(corner_a1[1]),
+    #     int(corner_a1[0]):int(corner_h8[0]),
+    # ]
+
+    return board_roi, corner_a1, corner_a8, corner_h1, corner_h8

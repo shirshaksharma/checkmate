@@ -4,3 +4,4 @@ include/*
 pyvenv.cfg
 .DS_Store
 .idea/
+*.pyc

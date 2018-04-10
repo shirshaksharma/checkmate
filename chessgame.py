@@ -1,7 +1,5 @@
 import chess
 import chess.svg
-from IPython.display import SVG, display
-
 
 class chessGame():
     global board
