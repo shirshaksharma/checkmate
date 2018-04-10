@@ -274,5 +274,4 @@ def get_corners(board, img):
     #     int(corner_h8[1]):int(corner_a1[1]),
     #     int(corner_a1[0]):int(corner_h8[0]),
     # ]
-
-    return board_roi, corner_a1, corner_a8, corner_h1, corner_h8
+    return board_roi, (roi_x_min, roi_y_min)

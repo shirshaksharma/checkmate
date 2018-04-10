@@ -17,10 +17,11 @@ siq = ""
 chess = chessGame()
 
 
-def fingerclick(points):
+def fingerclick(points, offset):
     pointDict = {}
     for point in points:
-        square = which_square(board, point)
+        real_point = [(point[0] + offset[0]), (point[1] + offset[1])]
+        square = which_square(board, real_point)
         if square:
             if square in pointDict:
                 pointDict[square] += 1
@@ -118,13 +119,15 @@ while True:
     blur_dilation = find_largest_contour(board_roi, HSV_MIN, HSV_MAX)[1]
     convex_hall = find_convex_hull(board_roi, largest_contour)
 
+    height_small, width_small = board_roi.shape[:2]
+
     if convex_hall is not 0:
         farthest_point = convex_hall[2]
         allFarPoints = convex_hall[3]
-        fingerclick(allFarPoints)
+        fingerclick(allFarPoints, corners_board[1])
 
     cv2.imshow("blur dilation", blur_dilation)
-
+    cv2.imshow("board_roi", board_roi)
     cv2.imshow('img', img2)
     # cv2.imwrite('./img2.png', img2)
 
