@@ -49,7 +49,7 @@ def rotate_board(board):
         elif newstring[1] == '8':
             color = (255, 0, 0)
         else:
-            color = (0, 255, 0)
+            color = (0, 0, 0)
         newboard[newstring] = {
             'TL': square['TL'],
             'TR': square['TR'],

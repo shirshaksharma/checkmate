@@ -17,22 +17,43 @@ siq = ""
 chess = chessGame()
 
 
-def click(event, x, y, flags, param):
+def fingerclick(points):
+    pointDict = {}
+    for point in points:
+        square = which_square(board, point)
+        if square:
+            if square in pointDict:
+                pointDict[square] += 1
+            else:
+                pointDict[square] = 1
+
+    maxi = [0, ""]
+    for key, value in pointDict.items():
+        if value > maxi[0]:
+            maxi[0] = value
+            maxi[1] = key
+
+    if maxi[0] != 0:
+        click("", "", "", "", "", directSquare=maxi[1])
+
+
+def click(event, x, y, flags, param, directSquare=None):
     global filled
     global filledArray
     global board
     global chess
     global siq
     if board != {}:
-        current = which_square(board, (x, y))
+        if directSquare:
+            current = directSquare
+        else:
+            current = which_square(board, (x, y))
         last = filled[0]
         filled[0] = current
         if current != "" and filled[1] < 15 and last == current:
             filled[1] += 1
             if (filled[1] >= 15):
-                print(current)
                 if (current in filledArray):
-                    print(siq, current)
                     chess.move(siq, current)
                     filledArray = []
                     siq = ""
@@ -43,7 +64,8 @@ def click(event, x, y, flags, param):
             filled[1] = 0
 
 
-images = cv2.VideoCapture(1)
+cam = input("Enter 1 for external webcam and 0 for internal webcam")
+images = cv2.VideoCapture(int(cam))
 cv2.namedWindow("img")
 cv2.setMouseCallback("img", click)
 retever = False
@@ -99,7 +121,7 @@ while True:
     if convex_hall is not 0:
         farthest_point = convex_hall[2]
         allFarPoints = convex_hall[3]
-        print("all far points", allFarPoints)
+        fingerclick(allFarPoints)
 
     cv2.imshow("blur dilation", blur_dilation)
 
