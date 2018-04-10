@@ -56,6 +56,8 @@ while True:
     # Exits the game
     if key == ord('q'):
         break
+    if chess.isOver():
+        break
 
     # DRAW PHASE
     if retever:
@@ -65,16 +67,15 @@ while True:
             pts = pts.reshape(-1, 1, 2)
             if(key == filled[0] and filled[1] == 15):
                 img2 = cv2.fillPoly(
-                    img2, [pts], square['color'])
+                    img2, [pts], (0, 0, 255))
             elif(key in filledArray):
                 img2 = cv2.fillPoly(
                     img2, [pts], (255, 0, 0))
             else:
-                img2 = cv2.polylines(img2, [pts], 1, square['color'], 4)
-        img2 = cv2.circle(img2, (600, 350), 10, (255, 255, 0))
+                img2 = cv2.polylines(img2, [pts], 1, (0, 0, 0), 4)
 
     cv2.imshow('img', img2)
-    cv2.imwrite('./img2.png', img2)
+    # cv2.imwrite('./img2.png', img2)
 
 cv2.destroyAllWindows()
 images.release()
