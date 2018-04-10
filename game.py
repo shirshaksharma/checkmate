@@ -3,9 +3,12 @@ import cv2
 import glob
 import time
 from board import get_board, which_square, get_corners
+from handdetect import find_largest_contour, find_convex_hull, HSV_MAX, HSV_MIN
 
 board = {}
 filled = ["", 0]
+farthest_point = (0, 0)
+
 
 def click(event, x, y, flags, param):
     global filled
@@ -20,7 +23,7 @@ def click(event, x, y, flags, param):
             filled[1] = 0
 
 
-images = cv2.VideoCapture(0)
+images = cv2.VideoCapture(1)
 cv2.namedWindow("img")
 cv2.setMouseCallback("img", click)
 retever = False
@@ -49,6 +52,10 @@ while True:
 
     # DRAW PHASE
     if retever:
+        # Get the board ROI
+        corners_board = get_corners(board, img2)
+        board_roi = corners_board[0]
+
         for key, square in board.items():
             pts = np.array([square['TL'], square['TR'],
                             square['BR'], square['BL']], np.int)
@@ -60,7 +67,16 @@ while True:
                 img2 = cv2.polylines(img2, [pts], 1, square['color'], 4)
         img2 = cv2.circle(img2, (600, 350), 10, (255, 255, 0))
 
-    cv2.imshow("board roi", board_roi)
+    # Find the hand and fingertips
+    largest_contour = find_largest_contour(board_roi, HSV_MIN, HSV_MAX)[2]
+    blur_dilation = find_largest_contour(board_roi, HSV_MIN, HSV_MAX)[1]
+    convex_hall = find_convex_hull(board_roi, largest_contour)
+
+    if convex_hall is not 0:
+        farthest_point = convex_hall[2]
+
+    cv2.imshow("blur dilation", blur_dilation)
+
     cv2.imshow('img', img2)
 
 cv2.destroyAllWindows()

@@ -270,10 +270,6 @@ def get_corners(board, img):
     # print("height range", corner_a8, corner_a1, height)
     # print("width range", corner_h1, corner_a8, width)
 
-
-    print("roi range", int(corner_h8[1]), int(corner_a1[1]))
-    print("roi range", int(corner_h8[0]), int(corner_a1[0]))
-
     # board_roi = img[
     #     int(corner_h8[1]):int(corner_a1[1]),
     #     int(corner_a1[0]):int(corner_h8[0]),
