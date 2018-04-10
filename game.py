@@ -65,7 +65,7 @@ def click(event, x, y, flags, param, directSquare=None):
             filled[1] = 0
 
 
-cam = input("Enter 1 for external webcam and 0 for internal webcam")
+cam = input("Enter 1 for external webcam and 0 for internal webcam\n")
 images = cv2.VideoCapture(int(cam))
 cv2.namedWindow("img")
 cv2.setMouseCallback("img", click)
@@ -78,7 +78,7 @@ board_roi = frame[0:1, 0:1]
 while True:
     key = cv2.waitKey(1) & 0xFF
     sta, img = images.read()
-    img2 = img
+    img2 = img.copy()
     # Scans the curent image for a board
     if key == ord('s'):
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -86,7 +86,7 @@ while True:
 
         # Get the board ROI
         if board:
-            corners_board = get_corners(board, img2)
+            corners_board = get_corners(board, img)
             board_roi = corners_board[0]
 
     # Exits the game
@@ -98,7 +98,7 @@ while True:
     # DRAW PHASE
     if retever:
         # Get the board ROI
-        corners_board = get_corners(board, img2)
+        corners_board = get_corners(board, img)
         board_roi = corners_board[0]
 
         for key, square in board.items():
@@ -106,13 +106,13 @@ while True:
                             square['BR'], square['BL']], np.int)
             pts = pts.reshape(-1, 1, 2)
             if key == filled[0] and filled[1] == 15:
-                img2 = cv2.fillPoly(
-                    img2, [pts], (0, 0, 255))
+                img2 = cv2.polylines(
+                    img2, [pts], 1, (0, 0, 255), 10)
             elif(key in filledArray):
-                img2 = cv2.fillPoly(
-                    img2, [pts], (255, 0, 0))
+                img2 = cv2.polylines(
+                    img2, [pts], 1, (0, 255, 0), 10)
             else:
-                img2 = cv2.polylines(img2, [pts], 1, (0, 0, 0), 4)
+                img2 = cv2.polylines(img2, [pts], 1, square['color'], 4)
 
     # Find the hand and fingertips
     largest_contour = find_largest_contour(board_roi, HSV_MIN, HSV_MAX)[2]
@@ -125,11 +125,7 @@ while True:
         farthest_point = convex_hall[2]
         allFarPoints = convex_hall[3]
         fingerclick(allFarPoints, corners_board[1])
-
-    cv2.imshow("blur dilation", blur_dilation)
-    cv2.imshow("board_roi", board_roi)
-    cv2.imshow('img', img2)
-    # cv2.imwrite('./img2.png', img2)
+    cv2.imshow('Check Mate', img2)
 
 cv2.destroyAllWindows()
 images.release()
