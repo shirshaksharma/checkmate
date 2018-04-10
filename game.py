@@ -60,7 +60,7 @@ while True:
             pts = np.array([square['TL'], square['TR'],
                             square['BR'], square['BL']], np.int)
             pts = pts.reshape(-1, 1, 2)
-            if(key == filled[0] and filled[1] == 15):
+            if key == filled[0] and filled[1] == 15:
                 img2 = cv2.fillPoly(
                     img2, [pts], square['color'])
             else:
