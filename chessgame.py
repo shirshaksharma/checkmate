@@ -25,6 +25,9 @@ class chessGame():
             for line in img:
                 file.write(line)
 
+    def isOver(self):
+        return board.is_game_over()
+
     def move(self, start, end):
         mov = chess.Move.from_uci(start.lower() + end.lower())
         board.push(mov)
