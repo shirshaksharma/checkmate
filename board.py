@@ -12,10 +12,9 @@ def which_square(board, point):
                 return key
     return ""
 
+
 # This function allows us to get the outside points in for the board
 # it adds the x and y offsets to a point and then returns the extracted point
-
-
 def get_points_around(corners, a, b, c):
     ax = (corners[a][0][0] - (corners[b][0][0] - corners[a][0][0]))
     ay = (corners[a][0][1] - (corners[b][0][1] - corners[a][0][1]))
@@ -26,7 +25,7 @@ def get_points_around(corners, a, b, c):
         (corners[a][0][0] - ax) - (corners[a][0][0] - bx)
     cy = corners[a][0][1] - \
         (corners[a][0][1] - ay) - (corners[a][0][1] - by)
-    return (cx, cy)
+    return cx, cy
 
 
 def orient_board(board):
@@ -44,7 +43,6 @@ def rotate_board(board):
     for key, square in board.items():
         letteri = letters.index(key[0])
         numberi = numbers.index(key[1])
-        # letters[7-numberi]+numbers[letteri]
         newstring = letters[7-numberi]+numbers[letteri]
         if newstring[1] == '1':
             color = (0, 0, 255)
@@ -153,8 +151,6 @@ def construct_board(toprow, leftcol, rightcol, botrow, corners):
 
 
 # Find the chess board corners
-
-
 def get_board(gray):
 
     # prepare object points, like (0,0,0), (1,0,0), (2,0,0) ....,(6,5,0)
@@ -203,8 +199,11 @@ def get_board(gray):
     return board, True
 
 
+# Finds the area of the board
+# Used to create an ROI so it only searches for the hand inside the region
 def get_corners(board, img):
 
+    # Four corners of the square chessboard
     corner_a1 = board['A1']['BL']
     corner_a8 = board['A8']['TL']
     corner_h1 = board['H1']['BR']
@@ -217,11 +216,13 @@ def get_corners(board, img):
         corner_a8
     ]
 
+    # Initializes the min and max for x,y co-ordinates for the ROI
     x_min = corner_a8
     x_max = corner_h8
     y_min = corner_a1
     y_max = corner_h1
 
+    # Iterates through the 4 corners and finds out which one has the min/max x and y co-ordinate
     for i in range(len(corners)):
         if corners[i][0] <= x_min[0]:
             x_min = corners[i]
@@ -232,18 +233,22 @@ def get_corners(board, img):
         if corners[i][1] > y_max[1]:
             y_max = corners[i]
 
+    # Height and width of the chessboard area
     height = abs(y_max[1] - y_min[1])
     width = abs(x_max[0] - x_min[0])
 
+    # Initialize co-ordinates for the region of interest
     roi_y_min = y_min[1]
     roi_y_max = y_min[1] + height
 
     roi_x_min = x_min[0]
     roi_x_max = x_min[0] + width
 
-    # Making it a wider area
+    # Gets roughly the size of the cell and adds that differential to the ROI
+    # When the detected board is curved, the ROI can cut off some pixels. This remedies that.
     differential = height / 8
 
+    # Adds the differential if it is a valid point
     if roi_y_min - differential < 0:
         roi_y_min = 0
     else:
@@ -258,6 +263,12 @@ def get_corners(board, img):
 
     roi_x_max = roi_x_max + differential
 
+    # Uses those points to create a region of interest.
+    # This is the format of creating an ROI
+    # image [
+    #     mininum y point : maximum y point,
+    #     minimum x point : maximum x point
+    # ]
     board_roi = img[
         int(roi_y_min):int(roi_y_max),
         int(roi_x_min):int(roi_x_max)
