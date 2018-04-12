@@ -1,13 +1,12 @@
 import numpy as np
 import cv2
-import glob
-import time
 import os
 from chessgame import chessGame
 from board import get_board, which_square, get_corners, rotate_board
 from handdetect import find_largest_contour, find_convex_hull, HSV_MAX, HSV_MIN
 import webbrowser
 
+# Global variable declarations
 board = {}
 filled = ["", 0]
 farthest_point = (0, 0)
@@ -17,9 +16,12 @@ SENSATIVITY = 5
 flipped = False
 player1turn = True
 path = os.path.dirname(__file__)
+# Square in Question
 siq = ""
-
 chess = chessGame()
+
+# Gets the list of points and determins where most of them lies
+# then calls the click function with a direct square
 
 
 def fingerclick(points, offset):
@@ -42,6 +44,10 @@ def fingerclick(points, offset):
     if maxi[0] != 0:
         click("", "", "", "", "", directSquare=maxi[1])
 
+# Native mouse function remains for easy reimpimentation
+# directSquare allows for easy interaction with the finger
+# tracking code
+
 
 def click(event, x, y, flags, param, directSquare=None):
     global filled
@@ -57,6 +63,12 @@ def click(event, x, y, flags, param, directSquare=None):
             current = which_square(board, (x, y))
         last = filled[0]
         filled[0] = current
+        # If there is finger/Mouse is in a square and it has not been in that square
+        # for more than the SENSATIVITY amount of frames, adds to the frame count
+        # once the object has been in the square for SENSATIVITY frames, it either
+        # gets all the posible moves for that square, or if the square is in the array
+        # of filledArray then it calles the move by storing the SIQ of what the
+        # possible moves are from. If a move is made, it flips which players turn it is
         if current != "" and filled[1] < SENSATIVITY and last == current:
             filled[1] += 1
             if (filled[1] >= SENSATIVITY):
@@ -72,6 +84,7 @@ def click(event, x, y, flags, param, directSquare=None):
             filled[1] = 0
 
 
+# If the player has a secondary camera installed, allows them to pick it
 cam = input("Enter 1 for external webcam and 0 for internal webcam\n")
 images = cv2.VideoCapture(int(cam))
 retever = False
@@ -80,9 +93,14 @@ retever = False
 _, frame = images.read()
 board_roi = frame[0:1, 0:1]
 
+# Opens the game board html
 webbrowser.open("file://" + path + '/game.html')
+
+# Game Loop
 while True:
+    # Gets the Key Press
     keyp = cv2.waitKey(1) & 0xFF
+    # Gets the current frame
     sta, img = images.read()
     img2 = img.copy()
     # Scans the curent image for a board
@@ -94,12 +112,14 @@ while True:
         if board:
             corners_board = get_corners(board, img)
             board_roi = corners_board[0]
+    # Rotates the board
     if keyp == ord('r'):
         board = rotate_board(board)
-
+    # Flips the board
     if keyp == ord('f'):
         flipped = not flipped
 
+    # Undoes last move
     if keyp == ord('u'):
         chess.undo()
         player1turn = not player1turn
@@ -110,12 +130,13 @@ while True:
     if chess.isOver():
         break
 
-    # DRAW PHASE
+    # DRAW PHASE (if the board was found)
     if retever:
         # Get the board ROI
         corners_board = get_corners(board, img)
         board_roi = corners_board[0]
 
+        # Draws the board
         for key, square in board.items():
             pts = np.array([square['TL'], square['TR'],
                             square['BR'], square['BL']], np.int)
@@ -145,9 +166,11 @@ while True:
         farthest_point = convex_hall[2]
         allFarPoints = convex_hall[3]
         fingerclick(allFarPoints, corners_board[1])
+    # Flips before showing
     if (flipped):
         img2 = cv2.flip(img2, 1)
 
+    # Prints the image
     if keyp == ord('p'):
         print('writing to ' + path + '/image2.png')
         cv2.imwrite(path + '/image2.png', img2)
