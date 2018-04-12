@@ -11,6 +11,7 @@ filled = ["", 0]
 farthest_point = (0, 0)
 allFarPoints = []
 filledArray = []
+SENSATIVITY = 5
 
 siq = ""
 
@@ -51,9 +52,9 @@ def click(event, x, y, flags, param, directSquare=None):
             current = which_square(board, (x, y))
         last = filled[0]
         filled[0] = current
-        if current != "" and filled[1] < 15 and last == current:
+        if current != "" and filled[1] < SENSATIVITY and last == current:
             filled[1] += 1
-            if (filled[1] >= 15):
+            if (filled[1] >= SENSATIVITY):
                 if (current in filledArray):
                     chess.move(siq, current)
                     filledArray = []
@@ -105,7 +106,7 @@ while True:
             pts = np.array([square['TL'], square['TR'],
                             square['BR'], square['BL']], np.int)
             pts = pts.reshape(-1, 1, 2)
-            if key == filled[0] and filled[1] == 15:
+            if key == filled[0] and filled[1] == SENSATIVITY:
                 img2 = cv2.polylines(
                     img2, [pts], 1, (0, 0, 255), 10)
             elif(key in filledArray):

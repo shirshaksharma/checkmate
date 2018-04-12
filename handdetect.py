@@ -50,7 +50,8 @@ def find_largest_contour(img, min_hsv, max_hsv):
 
     # Detecting the contours
     ret, thresh = cv2.threshold(img_dilation, 127, 255, 0)
-    im2, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    im2, contours, hierarchy = cv2.findContours(
+        thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
     # Picking the largest contour
     largest_contour = 0
@@ -90,7 +91,7 @@ def find_convex_hull(img, largest_contour):
             cv2.circle(img, far, 5, [0, 0, 255], -1)
 
     except AttributeError:
-        print("Shape not found")
+        # print("Shape not found")
         return 0
 
     return [start, end, far, all_detected_points]
@@ -111,8 +112,8 @@ def displayPoints(frame):
 
     # Circle ROI
     circle_roi = modified_img[
-                 width_mid - 10: width_mid + 10,
-                 height_mid - 10: height_mid + 10]
+        width_mid - 10: width_mid + 10,
+        height_mid - 10: height_mid + 10]
 
     # Draw circle at the middle of the screen
     cv2.circle(modified_img, (width_mid, height_mid), 10, (255, 255, 255))
