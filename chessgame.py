@@ -1,6 +1,7 @@
 import chess
 import chess.svg
 
+
 class chessGame():
     global board
     global squares
@@ -31,6 +32,10 @@ class chessGame():
     def move(self, start, end):
         mov = chess.Move.from_uci(start.lower() + end.lower())
         board.push(mov)
+        self.show()
+
+    def undo(self):
+        board.pop()
         self.show()
 
     def get(self, sqaure):

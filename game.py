@@ -100,6 +100,10 @@ while True:
     if key == ord('f'):
         flipped = not flipped
 
+    if key == ord('u'):
+        chess.undo()
+        player1turn = not player1turn
+
     # Exits the game
     if key == ord('q'):
         break
