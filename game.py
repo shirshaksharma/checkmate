@@ -3,7 +3,7 @@ import cv2
 import glob
 import time
 from chessgame import chessGame
-from board import get_board, which_square, get_corners
+from board import get_board, which_square, get_corners, rotate_board
 from handdetect import find_largest_contour, find_convex_hull, HSV_MAX, HSV_MIN
 
 board = {}
@@ -89,6 +89,8 @@ while True:
         if board:
             corners_board = get_corners(board, img)
             board_roi = corners_board[0]
+    if key == ord('r'):
+        board = rotate_board(board)
 
     # Exits the game
     if key == ord('q'):
@@ -127,6 +129,7 @@ while True:
         allFarPoints = convex_hall[3]
         fingerclick(allFarPoints, corners_board[1])
     cv2.imshow('Check Mate', img2)
+
 
 cv2.destroyAllWindows()
 images.release()

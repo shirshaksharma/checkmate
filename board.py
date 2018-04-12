@@ -79,7 +79,7 @@ def construct_board(toprow, leftcol, rightcol, botrow, corners):
             'TR': toprow[i+1],
             'BL': (corners[i-1][0][0], corners[i-1][0][1]),
             'BR': (corners[i][0][0], corners[i][0][1]),
-            'color': (0, 255, 0),
+            'color': (0, 0, 0),
             'filled': False
         }
     board['A8'] = {
@@ -107,7 +107,7 @@ def construct_board(toprow, leftcol, rightcol, botrow, corners):
                 'BL': (corners[((i+1)*7) + (j-2)][0][0], corners[((i+1)*7) + (j-2)][0][1]),
                 'TR': (corners[(i*7) + (j-1)][0][0], corners[(i*7) + (j-1)][0][1]),
                 'BR': (corners[((i+1)*7) + (j-1)][0][0], corners[((i+1)*7) + (j-1)][0][1]),
-                'color': (0, 255, 0),
+                'color': (0, 0, 0),
                 'filled': False
             }
         board[(leter + '8')] = {
@@ -133,7 +133,7 @@ def construct_board(toprow, leftcol, rightcol, botrow, corners):
             'TR': (corners[42 + i + 1][0][0], corners[42 + i + 1][0][1]),
             'BL': botrow[i],
             'BR': botrow[i+1],
-            'color': (0, 255, 0),
+            'color': (0, 0, 0),
             'filled': False
 
         }
