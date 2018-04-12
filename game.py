@@ -15,7 +15,7 @@ filledArray = []
 SENSATIVITY = 5
 flipped = False
 player1turn = True
-path = os.path.dirname(__file__)
+path = os.path.dirname(os.path.abspath(__file__))
 # Square in Question
 siq = ""
 chess = chessGame()
@@ -121,8 +121,8 @@ while True:
 
     # Undoes last move
     if keyp == ord('u'):
-        chess.undo()
-        player1turn = not player1turn
+        if(chess.undo()):
+            player1turn = not player1turn
 
     # Exits the game
     if keyp == ord('q'):
