@@ -2,9 +2,11 @@ import numpy as np
 import cv2
 import glob
 import time
+import os
 from chessgame import chessGame
 from board import get_board, which_square, get_corners, rotate_board
 from handdetect import find_largest_contour, find_convex_hull, HSV_MAX, HSV_MIN
+import webbrowser
 
 board = {}
 filled = ["", 0]
@@ -14,7 +16,7 @@ filledArray = []
 SENSATIVITY = 5
 flipped = False
 player1turn = True
-
+path = os.path.dirname(__file__)
 siq = ""
 
 chess = chessGame()
@@ -72,14 +74,13 @@ def click(event, x, y, flags, param, directSquare=None):
 
 cam = input("Enter 1 for external webcam and 0 for internal webcam\n")
 images = cv2.VideoCapture(int(cam))
-cv2.namedWindow("img")
-cv2.setMouseCallback("img", click)
 retever = False
 
 # Initialize the ROI
 _, frame = images.read()
 board_roi = frame[0:1, 0:1]
 
+webbrowser.open("file://" + path + '/game.html')
 while True:
     key = cv2.waitKey(1) & 0xFF
     sta, img = images.read()
