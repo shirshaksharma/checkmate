@@ -1,7 +1,8 @@
 # Check Mate
 Python application that uses Computer Vision so you can play chess using only a piece of paper.
 
-![](https://youtu.be/Lz0gl7ypkNo)
+[![Alt text for your video](https://img.youtube.com/vi/Lz0gl7ypkNo.jpg)](https://youtu.be/Lz0gl7ypkNo)
+
 
 ### Pre-requisites
 - **Python**: You will need Python 3 installed on your machine.
