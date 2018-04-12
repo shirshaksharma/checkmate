@@ -1,9 +1,8 @@
 import numpy as np
 import cv2
-import glob
-import time
 
 
+# Gets the square given an x and y value
 def which_square(board, point):
     for key, square in board.items():
         if((abs(square['TL'][0] - point[0]) + abs(square['BR'][0] - point[0]))
@@ -12,6 +11,9 @@ def which_square(board, point):
                     == abs(square['TL'][1] - square['BR'][1])):
                 return key
     return ""
+
+# This function allows us to get the outside points in for the board
+# it adds the x and y offsets to a point and then returns the extracted point
 
 
 def get_points_around(corners, a, b, c):
@@ -261,17 +263,4 @@ def get_corners(board, img):
         int(roi_x_min):int(roi_x_max)
     ]
 
-    # height = abs(corner_h8[1] - corner_a1[1])
-    # width = abs(corner_h1[0] - corner_a8[0])
-    #
-    # start_point = corner_a8[0], corner_h8[1]
-    # end_point = corner_h1[0], corner_a1[1]
-    #
-    # print("height range", corner_a8, corner_a1, height)
-    # print("width range", corner_h1, corner_a8, width)
-
-    # board_roi = img[
-    #     int(corner_h8[1]):int(corner_a1[1]),
-    #     int(corner_a1[0]):int(corner_h8[0]),
-    # ]
     return board_roi, (roi_x_min, roi_y_min)
