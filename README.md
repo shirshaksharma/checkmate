@@ -4,6 +4,8 @@ Python application that uses Computer Vision so you can play chess using only a 
 ### Pre-requisites
 - **Python**: You will need Python 3 installed on your machine.
 - **Webcam**: You will need either a laptop webcam or an external camera to detect the chessboard.
+- **Chessboard**: You can print out [this](board.jpg) chessboard on a regular sheet of paper for
+Checkmate to scan.
 
 ### Installation
 
