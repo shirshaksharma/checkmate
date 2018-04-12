@@ -26,6 +26,7 @@ Arrange the windows so you can see both of them easily.
 
 Press `s` to scan the area for the board.
 
+![](https://i.imgur.com/IqVwVSL.jpg)
 
 If you need to flip the image, press `f`.
 If you need to rotate the board for easier play, press `r`.
@@ -38,8 +39,13 @@ The board will highlight the back row for the current players turn.
 
 Once you have successfully oriented the board, select a piece by placing your finger on the square that that piece 
 is in.
-The square, once selected, will be outlined in **Red** and the squares that are valid moves for that piece will be 
+The square, once selected, will be outlined in **Red**. 
+
+![](https://i.imgur.com/mX3iIOq.jpg)
+
+The squares that are valid moves for that piece will be 
 outlined in **Green**.
+![](https://i.imgur.com/TJUl3xA.jpg)
 
 To move the piece to a valid square, place your finger in one of the Green squares. To choose a different piece 
 to move, place your finger in the new pieces square.
