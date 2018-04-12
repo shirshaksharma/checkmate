@@ -5,3 +5,4 @@ pyvenv.cfg
 .DS_Store
 .idea/
 *.pyc
+board.svg

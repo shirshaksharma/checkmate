@@ -82,11 +82,11 @@ board_roi = frame[0:1, 0:1]
 
 webbrowser.open("file://" + path + '/game.html')
 while True:
-    key = cv2.waitKey(1) & 0xFF
+    keyp = cv2.waitKey(1) & 0xFF
     sta, img = images.read()
     img2 = img.copy()
     # Scans the curent image for a board
-    if key == ord('s'):
+    if keyp == ord('s'):
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         board, retever = get_board(gray)
 
@@ -94,18 +94,18 @@ while True:
         if board:
             corners_board = get_corners(board, img)
             board_roi = corners_board[0]
-    if key == ord('r'):
+    if keyp == ord('r'):
         board = rotate_board(board)
 
-    if key == ord('f'):
+    if keyp == ord('f'):
         flipped = not flipped
 
-    if key == ord('u'):
+    if keyp == ord('u'):
         chess.undo()
         player1turn = not player1turn
 
     # Exits the game
-    if key == ord('q'):
+    if keyp == ord('q'):
         break
     if chess.isOver():
         break
@@ -147,6 +147,10 @@ while True:
         fingerclick(allFarPoints, corners_board[1])
     if (flipped):
         img2 = cv2.flip(img2, 1)
+
+    if keyp == ord('p'):
+        print('writing to ' + path + '/image2.png')
+        cv2.imwrite(path + '/image2.png', img2)
 
     cv2.imshow('Check Mate', img2)
 
