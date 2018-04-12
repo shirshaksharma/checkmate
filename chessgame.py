@@ -4,10 +4,12 @@ import os
 
 
 class chessGame():
+    # Global variable declaration
     global board
     global squares
     global path
 
+    # Class Setup
     def __init__(self):
         global board
         global squares
@@ -25,23 +27,35 @@ class chessGame():
                    'h8']
         self.show()
 
+    # Writes the current board to board.svg
+
     def show(self):
         img = chess.svg.board(board=board)
         with open(path + "/board.svg", 'w') as file:
             for line in img:
                 file.write(line)
 
+    # Calls the native python-chess is_game_over function to end the game
+
     def isOver(self):
         return board.is_game_over()
+
+    # Converts the syntax that the board is stored in, into uci syntax that can be used by
+    # python-chess, re-writes the board
 
     def move(self, start, end):
         mov = chess.Move.from_uci(start.lower() + end.lower())
         board.push(mov)
         self.show()
 
+    # Undoes any move
+
     def undo(self):
         board.pop()
         self.show()
+
+    # Gets all possible moves for a given square by itterating over all squares
+    # and seeing if that move is valid
 
     def get(self, sqaure):
         global squares
