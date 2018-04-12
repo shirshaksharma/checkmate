@@ -12,6 +12,8 @@ farthest_point = (0, 0)
 allFarPoints = []
 filledArray = []
 SENSATIVITY = 5
+flipped = False
+player1turn = True
 
 siq = ""
 
@@ -45,6 +47,7 @@ def click(event, x, y, flags, param, directSquare=None):
     global board
     global chess
     global siq
+    global player1turn
     if board != {}:
         if directSquare:
             current = directSquare
@@ -57,6 +60,7 @@ def click(event, x, y, flags, param, directSquare=None):
             if (filled[1] >= SENSATIVITY):
                 if (current in filledArray):
                     chess.move(siq, current)
+                    player1turn = not player1turn
                     filledArray = []
                     siq = ""
                 else:
@@ -92,6 +96,9 @@ while True:
     if key == ord('r'):
         board = rotate_board(board)
 
+    if key == ord('f'):
+        flipped = not flipped
+
     # Exits the game
     if key == ord('q'):
         break
@@ -115,7 +122,12 @@ while True:
                 img2 = cv2.polylines(
                     img2, [pts], 1, (0, 255, 0), 10)
             else:
-                img2 = cv2.polylines(img2, [pts], 1, square['color'], 4)
+                if('1' in key and not player1turn):
+                    img2 = cv2.polylines(img2, [pts], 1, (0, 0, 0), 4)
+                elif('8' in key and player1turn):
+                    img2 = cv2.polylines(img2, [pts], 1, (0, 0, 0), 4)
+                else:
+                    img2 = cv2.polylines(img2, [pts], 1, square['color'], 4)
 
     # Find the hand and fingertips
     largest_contour = find_largest_contour(board_roi, HSV_MIN, HSV_MAX)[2]
@@ -128,6 +140,9 @@ while True:
         farthest_point = convex_hall[2]
         allFarPoints = convex_hall[3]
         fingerclick(allFarPoints, corners_board[1])
+    if (flipped):
+        img2 = cv2.flip(img2, 1)
+
     cv2.imshow('Check Mate', img2)
 
 
