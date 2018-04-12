@@ -1,6 +1,8 @@
 # Check Mate
 Python application that uses Computer Vision so you can play chess using only a piece of paper.
 
+![](https://youtu.be/Lz0gl7ypkNo)
+
 ### Pre-requisites
 - **Python**: You will need Python 3 installed on your machine.
 - **Webcam**: You will need either a laptop webcam or an external camera to detect the chessboard.
