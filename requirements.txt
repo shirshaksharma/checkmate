@@ -42,7 +42,7 @@ six==1.11.0
 timeout==0.1.2
 tinycss2==0.6.1
 traitlets==4.3.2
-urllib3==1.22
+urllib3==1.24.2
 wcwidth==0.1.7
 webencodings==0.5.1
 wrapt==1.10.11
